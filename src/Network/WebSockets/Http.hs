@@ -96,6 +96,8 @@ data HandshakeException
     -- | The servers response was somehow invalid (missing headers or wrong
     -- security token)
     | MalformedResponse ResponseHead String
+    -- | The response status indicates an error
+    | ResponseStatusError Response
     -- | The request was well-formed, but the library user rejected it.
     -- (e.g. "unknown path")
     | RequestRejected Request String

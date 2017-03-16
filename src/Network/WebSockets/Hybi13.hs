@@ -65,24 +65,22 @@ finishRequest reqHttp headers =
 
 --------------------------------------------------------------------------------
 finishResponse :: RequestHead
-               -> ResponseHead
                -> Response
-finishResponse request response
+               -> Response
+finishResponse request response@(Response responseHead _)
     -- Response message should be one of
     --
     -- - WebSocket Protocol Handshake
     -- - Switching Protocols
     --
     -- But we don't check it for now
-    | responseCode response /= 101  = throw $ MalformedResponse response
-        "Wrong response status or message."
-    | responseHash /= challengeHash = throw $ MalformedResponse response
+    | responseCode responseHead /= 101 = throw $ ResponseStatusError response
+    | responseHash /= challengeHash = throw $ MalformedResponse responseHead
         "Challenge and response hashes do not match."
-    | otherwise                     =
-        Response response ""
+    | otherwise                     = response
   where
-    key           = getRequestHeader  request  "Sec-WebSocket-Key"
-    responseHash  = getResponseHeader response "Sec-WebSocket-Accept"
+    key           = getRequestHeader  request      "Sec-WebSocket-Key"
+    responseHash  = getResponseHeader responseHead "Sec-WebSocket-Accept"
     challengeHash = B64.encode $ hashKey key
 
 

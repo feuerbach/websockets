@@ -61,7 +61,7 @@ finishRequest Hybi13 = Hybi13.finishRequest
 
 
 --------------------------------------------------------------------------------
-finishResponse :: Protocol -> RequestHead -> ResponseHead -> Response
+finishResponse :: Protocol -> RequestHead -> Response -> Response
 finishResponse Hybi13 = Hybi13.finishResponse
 
 

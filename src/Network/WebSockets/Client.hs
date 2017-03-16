@@ -94,7 +94,7 @@ runClientWithStream stream host path opts customHeaders app = do
     -- Create the request and send it
     request    <- createRequest protocol bHost bPath False customHeaders
     Stream.write stream (Builder.toLazyByteString $ encodeRequestHead request)
-    mbResponse <- Stream.parse stream decodeResponseHead
+    mbResponse <- Stream.parse stream decodeResponse
     response   <- case mbResponse of
         Just response -> return response
         Nothing       -> throwIO $ OtherHandshakeException $
